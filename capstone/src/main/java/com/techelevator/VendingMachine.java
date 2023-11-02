@@ -1,13 +1,16 @@
 package com.techelevator;
 
-public class VendingMachine {
-	private Map<String, Integer> inventoryMap;
+import java.util.List;
 
-	public Map<String, Integer> getInventoryMap (){
-		return inventoryMap;
+public class VendingMachine {
+	private List<Product> inventory;
+
+	public List<Product> getInventory (){
+		return inventory;
 	}
 	public void addInventory(String name, int quantity){
+		for(){
 
-		inventoryMap.put(name, quantity);
+		}
 	}
 }
