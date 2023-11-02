@@ -16,10 +16,13 @@ public class VendingMachineCLI {
 	}
 
 	public void run() {
+			VendingMachine vendingMachine = new VendingMachine();
 		while (true) {
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
+
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
+				vendingMachine.readFile();
 				// display vending machine items
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase

@@ -11,10 +11,12 @@ public class VendingMachine {
 	private double currentBalance;
 
 	public VendingMachine() {
-//		inventory = new ArrayList<>();
-//		currentBalance = 0.0;
+		inventory = new ArrayList<>();
+		currentBalance = 0.0;
+	}
 
-		this.inventory = readFile("src/main/resources/inventory.txt");
+		public void LoadInventory(String filePath) {
+			this.inventory = readFile(filePath);
 		System.out.println(inventory);
 
 	}

@@ -1,28 +1,23 @@
 package com.techelevator;
-
-import jdk.dynalink.NamedOperation;
-
-public class Product{
-
+public class Product {
+    private String slotLocation;
     private String name;
     private double price;
-    private int quantity;
     private String type;
-    public Product (String name, double price,  String type) {
+    private int quantity;
+
+    public Product(String slotLocation, String name, double price, String type) {
+        this.slotLocation = slotLocation;
         this.name = name;
         this.price = price;
-        this.quantity = 1;
         this.type = type;
+        this.quantity = 5;
     }
 
-
-    public Product (String name, double price,  int quantity, String type) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.type = type;
-
+    public String getSlotLocation() {
+        return slotLocation;
     }
+
     public String getName() {
         return name;
     }
@@ -31,26 +26,21 @@ public class Product{
         return price;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public boolean isSoldOut() {
+        return quantity <= 0;
     }
 
-    public String getType() {
-        return type;
-    }
-    public void increaseQuantity (int amount){
-          quantity = quantity + amount;
-    }
-    public void decreaseQuantity(int amount){
-        if (quantity > amount){
-            quantity = quantity - amount;
+    public void decrementQuantity() {
+        if (quantity > 0) {
+            quantity--;
         }
-    }
-    public boolean isSoldOut(){
-        return quantity == 0;
     }
 }
