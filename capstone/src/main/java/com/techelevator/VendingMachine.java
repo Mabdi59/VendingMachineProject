@@ -1,16 +1,23 @@
 package com.techelevator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VendingMachine {
 	private List<Product> inventory;
+	private double currentBalance;
 
-	public List<Product> getInventory (){
-		return inventory;
+	public VendingMachine() {
+		inventory = new ArrayList<>();
+		currentBalance = 0.0;
+
+
+
+
+
 	}
-	public void addInventory(String name, int quantity){
-		for(){
+	//public List<Product> getInventory (){
+		//return inventory;
 
-		}
 	}
 }
