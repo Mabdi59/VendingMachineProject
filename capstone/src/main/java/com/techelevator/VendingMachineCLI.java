@@ -2,6 +2,8 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
+import java.util.List;
+
 public class VendingMachineCLI {
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
@@ -19,12 +21,14 @@ public class VendingMachineCLI {
 			VendingMachine vendingMachine = new VendingMachine();
 		while (true) {
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-
+			String path = "src/main/resources/inventory.txt";
+			//List<String> items = vendingMachine.readFile("src/main/resources/inventory.txt");
+			vendingMachine.loadInventory(path);
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				List<String> items = vendingMachine.readFile();
-				for (int i=0; i < items.size(); i++){
-					System.out.println(items[i]);
+				List<Product> items = vendingMachine.getInventory();
+				for (Product product : items){
+					System.out.printf("%s %s %s %s%n",product.getSlotLocation(), product.getName(), Double.toString(product.getPrice()), product.getType());
 				}
 				// display vending machine items
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
