@@ -10,14 +10,5 @@ public class VendingMachine {
 	public VendingMachine() {
 		inventory = new ArrayList<>();
 		currentBalance = 0.0;
-
-
-
-
-
-	}
-	//public List<Product> getInventory (){
-		//return inventory;
-
 	}
 }
