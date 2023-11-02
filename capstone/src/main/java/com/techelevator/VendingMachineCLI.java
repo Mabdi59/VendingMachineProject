@@ -22,7 +22,10 @@ public class VendingMachineCLI {
 
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				vendingMachine.readFile();
+				List<String> items = vendingMachine.readFile();
+				for (int i=0; i < items.size(); i++){
+					System.out.println(items[i]);
+				}
 				// display vending machine items
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase

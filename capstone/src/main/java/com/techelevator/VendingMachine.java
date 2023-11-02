@@ -15,17 +15,18 @@ public class VendingMachine {
 		currentBalance = 0.0;
 	}
 
-		public void LoadInventory(String filePath) {
-			this.inventory = readFile(filePath);
+	public void LoadInventory(String filePath) {
+		this.inventory = readFile(filePath);
 		System.out.println(inventory);
 
 	}
+
 	public List<String> readFile(String path) {
 		List<String> listOfFiles = null;
 		try {
 			listOfFiles = Files.readAllLines(Path.of(path));
 
-		} catch (IOException e){
+		} catch (IOException e) {
 			System.out.printf("file not found: %s%n", path);
 		}
 		return listOfFiles;
