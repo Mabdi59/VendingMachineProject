@@ -42,17 +42,15 @@ public class Product{
     public String getType() {
         return type;
     }
-    public void addQuantity (int amount){
+    public void increaseQuantity (int amount){
           quantity = quantity + amount;
     }
     public void decreaseQuantity(int amount){
         if (quantity > amount){
             quantity = quantity - amount;
         }
-
     }
     public boolean isSoldOut(){
         return quantity == 0;
-
     }
 }
