@@ -1,5 +1,6 @@
 package com.techelevator;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class VendingMachine {
@@ -43,7 +44,7 @@ public class VendingMachine {
                 break;
             }
 
-            if (product.getSlotLocation() == slotLocation) {
+            if (Objects.equals(product.getSlotLocation(), slotLocation)) {
                 System.out.printf("You chose: " + product.getName());
                 return product;
             }
