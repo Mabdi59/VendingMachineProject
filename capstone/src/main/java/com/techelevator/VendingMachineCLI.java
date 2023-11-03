@@ -2,46 +2,61 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
-import java.util.List;
-
 public class VendingMachineCLI {
 
-	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
-	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
-	private static final String MAIN_MENU_OPTION_EXIT = "Exit";
-	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT};
+    private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
+    private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
+    private static final String MAIN_MENU_OPTION_EXIT = "Exit";
+    private static final String MAIN_MENU_OPTION_SALES_REPORT = "Sales Report";
 
-	private Menu menu;
+    private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT, MAIN_MENU_OPTION_SALES_REPORT};
 
-	public VendingMachineCLI(Menu menu) {
-		this.menu = menu;
-	}
+    private Menu menu;
 
-	public void run() {
-			VendingMachine vendingMachine = new VendingMachine();
-		while (true) {
-			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-			String path = "src/main/resources/inventory.txt";
-			//List<String> items = vendingMachine.readFile("src/main/resources/inventory.txt");
-			vendingMachine.loadInventory(path);
+    public VendingMachineCLI(Menu menu) {
+        this.menu = menu;
+    }
 
-			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				List<Product> items = vendingMachine.getInventory();
-				for (Product product : items){
-					System.out.printf("%s %s %s %s%n",product.getSlotLocation(), product.getName(), Double.toString(product.getPrice()), product.getType());
-				}
-				// display vending machine items
-			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				// do purchase
-			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
-				break;
-			}
-		}
-	}
+    public void run() {
+        VendingMachine vendingMachine = new VendingMachine();
+        vendingMachine.loadInventory("src/main/resources/inventory.txt");
+        vendingMachine.createAccount();
+        while (true) {
+            String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
-	public static void main(String[] args) {
-		Menu menu = new Menu(System.in, System.out);
-		VendingMachineCLI cli = new VendingMachineCLI(menu);
-		cli.run();
-	}
+            if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
+                vendingMachine.displayAllItems();
+            } else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
+                // new account to do transactions
+                CustomerAccount account = new CustomerAccount();
+
+                // ask for money
+
+                // ask them to choose an item
+
+                // charge account
+
+                // decrease quantity of item
+
+                // give them an item
+
+                //give them their change
+
+                // go back to main menu
+
+
+
+            } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
+                break;
+            } else if (choice.equals(MAIN_MENU_OPTION_SALES_REPORT)) {
+                // print sales report
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Menu menu = new Menu(System.in, System.out);
+        VendingMachineCLI cli = new VendingMachineCLI(menu);
+        cli.run();
+    }
 }
