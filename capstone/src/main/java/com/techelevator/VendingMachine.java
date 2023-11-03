@@ -40,7 +40,7 @@ public class VendingMachine {
     public Product searchItemBySlotLocation(String slotLocation) {
         for (Product product : inventory) {
             if (product.isSoldOut()) {
-                System.out.println("SOLD OUT: " + product.getName());
+//                System.out.println("SOLD OUT: " + product.getName());
                 break;
             }
 
@@ -52,7 +52,24 @@ public class VendingMachine {
         }
         return null;
     }
+
+    //    public void feedMoney(){}
+//    public void selectProduct(String slotLocation){
+//        displayAllItems();
+//        Product selection = searchItemBySlotLocation(slotLocation);
+//
+//    }
+    public Product dispenseProduct(Product product) {
+//        if (!inventory.contains(product))
+//            return null;
+
+
+        inventory.remove(product);
+        return product;
+    }
 }
+//    public void finishTransaction(){}
+//}
 
 
 
