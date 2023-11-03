@@ -40,7 +40,7 @@ public class VendingMachine {
         for (Product product : inventory) {
             if (product.isSoldOut()) {
                 System.out.println("SOLD OUT: " + product.getName());
-                return null;
+                break;
             }
 
             if (product.getSlotLocation() == slotLocation) {
@@ -48,6 +48,7 @@ public class VendingMachine {
                 return product;
             }
         }
+        return null;
     }
 }
 
