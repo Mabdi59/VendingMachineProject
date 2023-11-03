@@ -1,47 +1,43 @@
 package com.techelevator;
 
+import com.techelevator.exceptions.ProductFormatException;
 import com.techelevator.view.Menu;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Set;
 
 public class VendingMachineCLI {
 
-	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
-	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
-	private static final String MAIN_MENU_OPTION_EXIT = "Exit";
-	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT};
+    private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
+    private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
+    private static final String MAIN_MENU_OPTION_EXIT = "Exit";
+    private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT};
 
-	private Menu menu;
+    private Menu menu;
 
-	public VendingMachineCLI(Menu menu) {
-		this.menu = menu;
-	}
+    public VendingMachineCLI(Menu menu) {
+        this.menu = menu;
+    }
 
-	public void run() {
-			VendingMachine vendingMachine = new VendingMachine();
-		while (true) {
-			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-			String path = "src/main/resources/inventory.txt";
-			//List<String> items = vendingMachine.readFile("src/main/resources/inventory.txt");
-			vendingMachine.loadInventory(path);
+    public void run() {
+        VendingMachine vendingMachine = new VendingMachine();
+        vendingMachine.loadInventory("src/main/resources/inventory.txt");
+        while (true) {
+            String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
-			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				List<Product> items = vendingMachine.getInventory();
-				for (Product product : items){
-					System.out.printf("%s %s %s %s%n",product.getSlotLocation(), product.getName(), Double.toString(product.getPrice()), product.getType());
-				}
-				// display vending machine items
-			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				// do purchase
-			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
-				break;
-			}
-		}
-	}
+            if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
+                vendingMachine.displayItems();
+            } else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
+                // do purchase
+            } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
+                break;
+            }
+        }
+    }
 
-	public static void main(String[] args) {
-		Menu menu = new Menu(System.in, System.out);
-		VendingMachineCLI cli = new VendingMachineCLI(menu);
-		cli.run();
-	}
+    public static void main(String[] args) {
+        Menu menu = new Menu(System.in, System.out);
+        VendingMachineCLI cli = new VendingMachineCLI(menu);
+        cli.run();
+    }
 }
