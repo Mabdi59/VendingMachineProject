@@ -30,10 +30,19 @@ public class VendingMachineCLI {
                 // new account to do transactions
                 CustomerAccount account = new CustomerAccount();
 
-                // ask them what they want
+                // ask for money
 
+                // ask them to choose an item
 
-                // do purchase
+                // charge account
+
+                // decrease quantity of item
+
+                // give them an item
+
+                //give them their change
+
+                // go back to main menu
 
 
 

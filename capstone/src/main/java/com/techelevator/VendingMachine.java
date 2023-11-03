@@ -45,6 +45,7 @@ public class VendingMachine {
             }
 
             if (Objects.equals(product.getSlotLocation(), slotLocation)) {
+                // 7.2 tells you what to print when you return an item
                 System.out.printf("You chose: " + product.getName());
                 return product;
             }
