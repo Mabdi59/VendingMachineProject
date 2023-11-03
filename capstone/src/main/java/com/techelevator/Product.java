@@ -34,13 +34,13 @@ public class Product {
         return quantity;
     }
 
-    public boolean isSoldOut() {
-        return quantity <= 0;
-    }
-
     public void decrementQuantity() {
         if (quantity > 0) {
             quantity--;
         }
     }
+    public boolean isSoldOut() {
+        return quantity <= 0;
+    }
+
 }
