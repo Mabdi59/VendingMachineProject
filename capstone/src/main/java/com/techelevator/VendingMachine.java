@@ -1,12 +1,5 @@
 package com.techelevator;
 
-import com.techelevator.exceptions.ProductFormatException;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class VendingMachine {

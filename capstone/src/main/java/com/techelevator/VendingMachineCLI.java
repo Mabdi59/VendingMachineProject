@@ -1,10 +1,6 @@
 package com.techelevator;
 
-import com.techelevator.exceptions.ProductFormatException;
 import com.techelevator.view.Menu;
-
-import java.io.IOException;
-import java.util.Set;
 
 public class VendingMachineCLI {
 
