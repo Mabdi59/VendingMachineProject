@@ -13,11 +13,10 @@ import static org.junit.Assert.*;
 
 public class InventoryTest {
     private Inventory inventory;
-    private String file = "src/test/resources/inventory_test.txt";
 
     @BeforeEach
     void setUp()  throws IOException, ProductFormatException {
-        inventory = new Inventory(file);
+        inventory = new Inventory("src/test/resources/inventory_test.txt");
     }
 
     @Test

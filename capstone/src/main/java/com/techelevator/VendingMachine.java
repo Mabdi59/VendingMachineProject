@@ -142,7 +142,7 @@ public class VendingMachine {
     public Product searchItemBySlotLocation(String slotLocation) {
         for (Product product : inventory) {
             if (product.isSoldOut()) {
-                System.out.println("SOLD OUT: " + product.getName());
+//                System.out.println("SOLD OUT: " + product.getName());
                 break;
             }
 
