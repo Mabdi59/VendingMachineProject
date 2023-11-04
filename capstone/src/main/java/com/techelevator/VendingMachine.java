@@ -2,7 +2,6 @@ package com.techelevator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,13 +9,6 @@ import java.time.format.DateTimeFormatter;
 public class VendingMachine {
     private Set<Product> inventory;
     private CustomerAccount account;
-
-    private Map<String, Integer> salesReport = new TreeMap<>();
-//    private List<String> transactionsList;
-
-//    public VendingMachine() {
-//        transactionsList = new ArrayList<>();
-//    }
 
     public Set<Product> getInventory() {
         return inventory;
@@ -33,10 +25,6 @@ public class VendingMachine {
     public CustomerAccount getAccount() {
         return account;
     }
-
-//    public List<String> getTransactions() {
-//        return transactionsList;
-//    }
 
     public void displayItem(Product product) {
         System.out.printf("%s %s %s %s%n",
@@ -144,39 +132,58 @@ public class VendingMachine {
 //        transactionsList.add(transaction);
 
         String transaction = String.format("%s %s $%.2f $%.2f",
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
+                currentTime("MM/dd/yyyy hh:mm:ss a"),
                 message,
                 amount,
                 account.getBalance()
         );
 
-        try (FileOutputStream logWriter = new FileOutputStream("Log.txt", true)) {
-            logWriter.write(transaction.getBytes());
+        writeToFile(transaction, "Log.txt");
+    }
+
+
+    public void generateSalesReport() {
+        String filename = String.format("sales_report_%s.txt",
+                currentTime("yyyyMMddHHmmss"));
+
+        for (Product product : inventory) {
+            int quantityRemaining = 5 - product.getQuantity();
+
+            String line = String.format("%s|%s",
+                    product.getName(),
+                    quantityRemaining);
+
+            writeToFile(line, filename);
+
+        }
+
+        String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
+        writeToFile(totalSales, filename);
+    }
+
+    public double calculateTotalSales() {
+        double salesCounter = 0.0;
+        for (Product product : inventory) {
+            salesCounter+=product.getPrice() * (5 - product.getQuantity());
+        }
+        return salesCounter;
+    }
+
+    public static String currentTime(String pattern) {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public void writeToFile(String string, String filename) {
+        try (FileOutputStream logWriter = new FileOutputStream(filename, true)) {
+            logWriter.write(string.getBytes());
         } catch (IOException e) {
             System.out.println("File not found");
         }
     }
 
-    public void generateSalesReport(String name, String quantity){
-//        inventory
-
-
-    }
-
-    public void writeSalesReportToFile(){
-
-    }
-
     public Product searchItemBySlotLocation(String slotLocation) {
         for (Product product : inventory) {
-            if (product.isSoldOut()) {
-//                System.out.println("SOLD OUT: " + product.getName());
-                break;
-            }
-
             if (Objects.equals(product.getSlotLocation(), slotLocation)) {
-                // Print a message indicating the selected product
-                System.out.printf("You chose: %s%n", product.getName());
                 return product;
             }
         }

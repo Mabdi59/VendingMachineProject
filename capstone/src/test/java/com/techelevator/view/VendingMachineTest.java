@@ -13,16 +13,11 @@ public class VendingMachineTest {
         vendingMachine = new VendingMachine();
         vendingMachine.loadInventory("src/test/resources/inventory_test.txt");
     }
-    @Test
-    void test_should_append_data_to_log_file(){
 
-    }
+    // TODO: test total sales calculator
 
 //    @Test
-//    void test_should_dispense_product_when_in_inventory(){
-//        Product selection = vendingMachine.searchItemBySlotLocation("B1");
+//    void test_should_append_data_to_log_file(){
 //
-//        Product received = vendingMachine.dispenseProduct(selection);
-//        Assert.assertEquals();
 //    }
 }
