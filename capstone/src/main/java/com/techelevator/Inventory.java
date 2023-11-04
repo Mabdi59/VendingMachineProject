@@ -37,12 +37,12 @@ public class Inventory {
     }
 
     private List<String> readFile() {
-        List<String> files = null;
+        List<String> listOfStrings = null;
         try {
-            files = Files.readAllLines(Path.of(filePath));
+            listOfStrings = Files.readAllLines(Path.of(filePath));
         } catch (IOException e) {
             System.out.println("File not found: " + filePath);
         }
-        return files;
+        return listOfStrings;
     }
 }
