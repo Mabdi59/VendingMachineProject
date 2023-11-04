@@ -83,15 +83,15 @@ public class VendingMachine {
         System.out.println("Money Remaining: $" + account.getBalance());
 
         String message = "";
-        if (product.getType().equalsIgnoreCase("Chip")) {
+        if (product.getType().equalsIgnoreCase("Chip"))
             message = "Crunch Crunch, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Candy")) {
+        else if (product.getType().equalsIgnoreCase("Candy"))
             message = "Munch Munch, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Drink")) {
+        else if (product.getType().equalsIgnoreCase("Drink"))
             message = "Glug Glug, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Gum")) {
+        else if (product.getType().equalsIgnoreCase("Gum"))
             message = "Chew Chew, Yum!";
-        }
+
         System.out.println(message);
     }
 
@@ -101,11 +101,10 @@ public class VendingMachine {
         while (true) {
             System.out.print("Enter the slot location of the product you want to purchase: ");
             slotLocation = scanner.nextLine();
-            if (isValidSlotLocation(slotLocation)) {
-                break;
-            } else {
+            if (!isValidSlotLocation(slotLocation))
                 System.out.println("Invalid slot location or product is sold out. Please try again.");
-            }
+            else
+                break;
         }
         return slotLocation;
     }
