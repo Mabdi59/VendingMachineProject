@@ -1,19 +1,22 @@
 package com.techelevator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
+
 public class VendingMachine {
     private Set<Product> inventory;
     private CustomerAccount account;
-    private List<String> transactionsList;
 
-    public VendingMachine() {
-        transactionsList = new ArrayList<>();
-    }
+    private Map<String, Integer> salesReport = new TreeMap<>();
+//    private List<String> transactionsList;
+
+//    public VendingMachine() {
+//        transactionsList = new ArrayList<>();
+//    }
 
     public Set<Product> getInventory() {
         return inventory;
@@ -31,9 +34,9 @@ public class VendingMachine {
         return account;
     }
 
-    public List<String> getTransactions() {
-        return transactionsList;
-    }
+//    public List<String> getTransactions() {
+//        return transactionsList;
+//    }
 
     public void displayItem(Product product) {
         System.out.printf("%s %s %s %s%n",
@@ -75,7 +78,7 @@ public class VendingMachine {
                     dispenseProduct(selectedProduct);
 
                     // Log the transaction
-                    logTransaction(selectedProduct);
+//                    logTransaction(selectedProduct);
 
                     // Go back to the Purchase menu
                     break;
@@ -120,23 +123,48 @@ public class VendingMachine {
     }
 
     private boolean isValidSlotLocation(String slotLocation) {
-        if (!slotLocation.isEmpty()) {
-            for (Product product : inventory) {
-                if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut()) {
-                    return true;
-                }
+        if (slotLocation.isEmpty()) {
+            return false;
+        }
+
+        for (Product product : inventory) {
+            if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut()) {
+                return true;
             }
         }
         return false;
     }
 
-    private void logTransaction(Product product) {
+    private void logTransaction(String message, double amount) {
+//        String transaction = String.format("%s %s $%.2f $%.2f",
+//                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
+//                product.getName(),
+//                product.getPrice(),
+//                account.getBalance());
+//        transactionsList.add(transaction);
+
         String transaction = String.format("%s %s $%.2f $%.2f",
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
-                product.getName(),
-                product.getPrice(),
-                account.getBalance());
-        transactionsList.add(transaction);
+                message,
+                amount,
+                account.getBalance()
+        );
+
+        try (FileOutputStream logWriter = new FileOutputStream("Log.txt", true)) {
+            logWriter.write(transaction.getBytes());
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+    }
+
+    public void generateSalesReport(String name, String quantity){
+//        inventory
+
+
+    }
+
+    public void writeSalesReportToFile(){
+
     }
 
     public Product searchItemBySlotLocation(String slotLocation) {

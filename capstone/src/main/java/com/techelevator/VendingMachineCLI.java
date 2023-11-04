@@ -43,7 +43,7 @@ public class VendingMachineCLI {
             } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
                 break;
             } else if (choice.equals(MAIN_MENU_OPTION_SALES_REPORT)) {
-                generateSalesReport(vendingMachine.getTransactions());
+//                generateSalesReport(vendingMachine.getTransactions());
             }
         }
     }
@@ -72,21 +72,21 @@ public class VendingMachineCLI {
         return moneyToAdd;
     }
 
-    private void generateSalesReport(List<String> transactions) {
-        // Define the sales report filename with a timestamp
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        String filename = "SalesReport_" + timestamp + ".txt";
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (String transaction : transactions) {
-                writer.write(transaction);
-                writer.newLine();
-            }
-            System.out.println("Sales report has been generated: " + filename);
-        } catch (IOException e) {
-            System.out.println("Error writing the sales report to a file: " + e.getMessage());
-        }
-    }
+//    private void generateSalesReport(List<String> transactions) {
+//        // Define the sales report filename with a timestamp
+//        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+//        String filename = "SalesReport_" + timestamp + ".txt";
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+//            for (String transaction : transactions) {
+//                writer.write(transaction);
+//                writer.newLine();
+//            }
+//            System.out.println("Sales report has been generated: " + filename);
+//        } catch (IOException e) {
+//            System.out.println("Error writing the sales report to a file: " + e.getMessage());
+//        }
+//    }
 
     public static void main(String[] args) {
         Menu menu = new Menu(System.in, System.out);
