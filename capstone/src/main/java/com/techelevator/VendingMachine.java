@@ -111,14 +111,12 @@ public class VendingMachine {
     }
 
     private boolean isValidSlotLocation(String slotLocation) {
-        if (slotLocation.isEmpty()) {
+        if (slotLocation.isEmpty())
             return false;
-        }
 
         for (Product product : inventory) {
-            if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut()) {
+            if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut())
                 return true;
-            }
         }
         return false;
     }
@@ -183,9 +181,8 @@ public class VendingMachine {
 
     public Product searchItemBySlotLocation(String slotLocation) {
         for (Product product : inventory) {
-            if (Objects.equals(product.getSlotLocation(), slotLocation)) {
+            if (Objects.equals(product.getSlotLocation(), slotLocation))
                 return product;
-            }
         }
         return null;
     }
