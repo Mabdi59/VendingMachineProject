@@ -106,6 +106,7 @@ public class VendingMachine {
             else
                 break;
         }
+        scanner.close();
         return slotLocation;
     }
 
