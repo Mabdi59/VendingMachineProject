@@ -1,19 +1,14 @@
 package com.techelevator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
+
 public class VendingMachine {
     private Set<Product> inventory;
     private CustomerAccount account;
-    private List<String> transactionsList;
-
-    public VendingMachine() {
-        transactionsList = new ArrayList<>();
-    }
 
     public Set<Product> getInventory() {
         return inventory;
@@ -29,10 +24,6 @@ public class VendingMachine {
 
     public CustomerAccount getAccount() {
         return account;
-    }
-
-    public List<String> getTransactions() {
-        return transactionsList;
     }
 
     public void displayItem(Product product) {
@@ -75,7 +66,7 @@ public class VendingMachine {
                     dispenseProduct(selectedProduct);
 
                     // Log the transaction
-                    logTransaction(selectedProduct);
+//                    logTransaction(selectedProduct);
 
                     // Go back to the Purchase menu
                     break;
@@ -92,15 +83,15 @@ public class VendingMachine {
         System.out.println("Money Remaining: $" + account.getBalance());
 
         String message = "";
-        if (product.getType().equalsIgnoreCase("Chip")) {
+        if (product.getType().equalsIgnoreCase("Chip"))
             message = "Crunch Crunch, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Candy")) {
+        else if (product.getType().equalsIgnoreCase("Candy"))
             message = "Munch Munch, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Drink")) {
+        else if (product.getType().equalsIgnoreCase("Drink"))
             message = "Glug Glug, Yum!";
-        } else if (product.getType().equalsIgnoreCase("Gum")) {
+        else if (product.getType().equalsIgnoreCase("Gum"))
             message = "Chew Chew, Yum!";
-        }
+
         System.out.println(message);
     }
 
@@ -110,47 +101,87 @@ public class VendingMachine {
         while (true) {
             System.out.print("Enter the slot location of the product you want to purchase: ");
             slotLocation = scanner.nextLine();
-            if (isValidSlotLocation(slotLocation)) {
-                break;
-            } else {
+            if (!isValidSlotLocation(slotLocation))
                 System.out.println("Invalid slot location or product is sold out. Please try again.");
-            }
+            else
+                break;
         }
         return slotLocation;
     }
 
     private boolean isValidSlotLocation(String slotLocation) {
-        if (!slotLocation.isEmpty()) {
-            for (Product product : inventory) {
-                if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut()) {
-                    return true;
-                }
-            }
+        if (slotLocation.isEmpty())
+            return false;
+
+        for (Product product : inventory) {
+            if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut())
+                return true;
         }
         return false;
     }
 
-    private void logTransaction(Product product) {
+    private void logTransaction(String message, double amount) {
+//        String transaction = String.format("%s %s $%.2f $%.2f",
+//                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
+//                product.getName(),
+//                product.getPrice(),
+//                account.getBalance());
+//        transactionsList.add(transaction);
+
         String transaction = String.format("%s %s $%.2f $%.2f",
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
-                product.getName(),
-                product.getPrice(),
-                account.getBalance());
-        transactionsList.add(transaction);
+                currentTime("MM/dd/yyyy hh:mm:ss a"),
+                message,
+                amount,
+                account.getBalance()
+        );
+
+        writeToFile(transaction, "Log.txt");
+    }
+
+
+    public void generateSalesReport() {
+        String filename = String.format("sales_report_%s.txt",
+                currentTime("yyyyMMddHHmmss"));
+
+        for (Product product : inventory) {
+            int quantityRemaining = 5 - product.getQuantity();
+
+            String line = String.format("%s|%s",
+                    product.getName(),
+                    quantityRemaining);
+
+            writeToFile(line, filename);
+
+        }
+
+        String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
+        writeToFile(totalSales, filename);
+    }
+
+    public double calculateTotalSales() {
+        double salesCounter = 0.0;
+        for (Product product : inventory) {
+            salesCounter+=product.getPrice() * (5 - product.getQuantity());
+        }
+        return salesCounter;
+    }
+
+    public static String currentTime(String pattern) {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public void writeToFile(String string, String filename) {
+        try (FileOutputStream logWriter = new FileOutputStream(filename, true)) {
+            logWriter.write(string.getBytes());
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
     }
 
     public Product searchItemBySlotLocation(String slotLocation) {
         for (Product product : inventory) {
-            if (product.isSoldOut()) {
-//                System.out.println("SOLD OUT: " + product.getName());
-                break;
-            }
-
-            if (Objects.equals(product.getSlotLocation(), slotLocation)) {
-                // Print a message indicating the selected product
-                System.out.printf("You chose: %s%n", product.getName());
+            if (Objects.equals(product.getSlotLocation(), slotLocation))
                 return product;
-            }
         }
         return null;
     }
