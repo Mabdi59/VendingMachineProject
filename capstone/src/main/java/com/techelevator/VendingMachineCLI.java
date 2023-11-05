@@ -30,13 +30,13 @@ public class VendingMachineCLI {
     public void run() {
         VendingMachine vendingMachine = new VendingMachine();
         vendingMachine.loadInventory("src/main/resources/inventory.txt");
-        vendingMachine.createAccount();
         while (true) {
             String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
             if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
                 vendingMachine.displayAllItems();
             } else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
+                vendingMachine.createAccount();
                 double moneyToAdd = promptForMoney();
                 vendingMachine.getAccount().addToBalance(moneyToAdd);
                 vendingMachine.selectProduct();
