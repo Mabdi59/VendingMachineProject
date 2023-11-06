@@ -15,7 +15,7 @@ public class VendingMachineTest {
     }
 
 //    @Test
-//    void test_should_generate
+//    void test_should_generate_sales_report(){}
 
     // TODO: test total sales calculator
 
