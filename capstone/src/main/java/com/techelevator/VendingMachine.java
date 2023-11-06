@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class VendingMachine {
+    private Scanner userInput = new Scanner(System.in);
     private Set<Product> inventory;
     private CustomerAccount account;
 
@@ -55,7 +56,6 @@ public class VendingMachine {
                     account.subtractFromBalance(selectedProduct.getPrice());
                     selectedProduct.decrementQuantity();
                     dispenseProduct(selectedProduct);
-                    logTransaction(selectedProduct.getName(), selectedProduct.getPrice());
                     break;
                 } else {
                     System.out.println("Insufficient balance to purchase this item. Please try again.");
@@ -69,9 +69,44 @@ public class VendingMachine {
         System.out.printf("Price: $%.2f%n", product.getPrice());
         System.out.printf("Money Remaining: $%.2f%n", account.getBalance());
 
+        logTransaction(product.getName(), product.getPrice());
         String message = getMessageForProductType(product.getType());
         System.out.println(message);
     }
+
+    private void feedMoney(double amount){
+        account.addToBalance(amount);
+        logTransaction("FEED MONEY", amount);
+    }
+    public double promptForMoney() {
+//        Scanner scanner = new Scanner(System.in);
+        double moneyToAdd = 0.0;
+
+        while (true) {
+            System.out.print("Enter the amount to add (in dollars): $");
+
+            if (userInput.hasNextDouble()) {
+                moneyToAdd = userInput.nextDouble();
+
+                if (moneyToAdd > 0) {
+                    break;
+                } else {
+                    System.out.println("Please enter a valid positive amount.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                userInput.next(); // Consume invalid input
+            }
+        }
+
+        feedMoney(moneyToAdd);
+        return moneyToAdd;
+    }
+    public void dispenseChange(){
+        logTransaction("GIVE CHANGE", account.giveChange());
+        account.giveChange();
+    }
+
     public String getMessageForProductType(String productType) {
         switch (productType.toLowerCase()) {
             case "chip":
@@ -89,10 +124,10 @@ public class VendingMachine {
 
     private String promptForProductSelection() {
         String slotLocation = "";
-        Scanner scanner = new Scanner(System.in);
+//        Scanner userInput = new Scanner(System.in);
         while (true) {
             System.out.print("Enter the slot location of the product you want to purchase: ");
-            slotLocation = scanner.nextLine();
+            slotLocation = userInput.nextLine();
             if (!isValidSlotLocation(slotLocation)) {
                 System.out.println("Invalid slot location or product is sold out. Please try again.");
             } else {
@@ -153,6 +188,7 @@ public class VendingMachine {
                     );
                     writer.write(line);
                     writer.newLine();
+                    System.out.println("new file: " + filename);
                 }
 
                 String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
