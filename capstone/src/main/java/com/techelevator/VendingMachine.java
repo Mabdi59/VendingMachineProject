@@ -145,11 +145,11 @@ public class VendingMachine {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
                 for (Product product : inventory) {
                     int quantityRemaining = 5 - product.getQuantity();
-                    String line = String.format("%s|%s|%d|%s",
-                            product.getSlotLocation(),
+                    String line = String.format("%s|%d",
+                          //  product.getSlotLocation(),
                             product.getName(),
-                            quantityRemaining,
-                            product.getType()
+                            quantityRemaining
+                           // product.getType()
                     );
                     writer.write(line);
                     writer.newLine();
