@@ -37,9 +37,8 @@ public class VendingMachineCLI {
             } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
                 break;
             } else if (choice.equals(MAIN_MENU_OPTION_SALES_REPORT)) {
-                // Placeholder for generateSalesReport method
-                // generateSalesReport(vendingMachine.getTransactions());
-                System.out.println("Sales report feature is under construction.");
+//                System.out.println("Sales report feature is under construction.");
+                vendingMachine.generateSalesReport();
             }
         }
     }

@@ -1,5 +1,4 @@
 package com.techelevator;
-import javax.security.sasl.SaslClient;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -127,7 +126,7 @@ public class VendingMachine {
                 amount,
                 account.getBalance());
 
-        writeTransactionLog(transaction, "transactions.log");
+        writeTransactionLog(transaction, "Log.txt");
     }
 
     private void writeTransactionLog(String transaction, String filename) {
@@ -140,7 +139,7 @@ public class VendingMachine {
     }
 
         public void generateSalesReport() {
-            String filename = String.format("sales_report_%s.txt",
+            String filename = String.format("SalesReport_%s.txt",
                     currentTime("yyyyMMddHHmmss"));
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
