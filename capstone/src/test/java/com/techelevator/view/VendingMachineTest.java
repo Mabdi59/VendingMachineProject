@@ -14,7 +14,8 @@ public class VendingMachineTest {
         vendingMachine.loadInventory("src/test/resources/inventory_test.txt");
     }
 
-
+//    @Test
+//    void test_should_generate
 
     // TODO: test total sales calculator
 
