@@ -1,0 +1,6 @@
+Cola|1
+Moonpie|0
+Potato Crisps|0
+Cowtales|0
+
+**TOTAL SALES** $1.25
