@@ -1,4 +1,5 @@
 package com.techelevator;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -74,10 +75,11 @@ public class VendingMachine {
         System.out.println(message);
     }
 
-    private void feedMoney(double amount){
+    private void feedMoney(double amount) {
         account.addToBalance(amount);
         logTransaction("FEED MONEY", amount);
     }
+
     public double promptForMoney() {
 //        Scanner scanner = new Scanner(System.in);
         double moneyToAdd = 0.0;
@@ -102,7 +104,8 @@ public class VendingMachine {
         feedMoney(moneyToAdd);
         return moneyToAdd;
     }
-    public void dispenseChange(){
+
+    public void dispenseChange() {
         logTransaction("GIVE CHANGE", account.giveChange());
         account.giveChange();
     }
@@ -173,52 +176,52 @@ public class VendingMachine {
         }
     }
 
-        public void generateSalesReport() {
-            String filename = String.format("SalesReport_%s.txt",
-                    currentTime("yyyyMMddHHmmss"));
+    public void generateSalesReport() {
+        String filename = String.format("SalesReport_%s.txt",
+                currentTime("yyyyMMddHHmmss"));
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-                for (Product product : inventory) {
-                    int quantityRemaining = 5 - product.getQuantity();
-                    String line = String.format("%s|%d",
-                          //  product.getSlotLocation(),
-                            product.getName(),
-                            quantityRemaining
-                           // product.getType()
-                    );
-                    writer.write(line);
-                    writer.newLine();
-                    System.out.println("new file: " + filename);
-                }
-
-                String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
-                writer.write(totalSales);
-                System.out.println("Sales report has been generated: " + filename);
-            } catch (IOException e) {
-                System.out.println("Error writing the sales report to a file: " + e.getMessage());
-            }
-        }
-
-        public double calculateTotalSales() {
-            double totalSales = 0.0;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Product product : inventory) {
-                totalSales += product.getPrice() * (5 - product.getQuantity());
+                int quantityRemaining = 5 - product.getQuantity();
+                String line = String.format("%s|%d",
+                        //  product.getSlotLocation(),
+                        product.getName(),
+                        quantityRemaining
+                        // product.getType()
+                );
+                writer.write(line);
+                writer.newLine();
+                System.out.println("new file: " + filename);
             }
-            return totalSales;
-        }
 
-        public static String currentTime(String pattern) {
-            return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
-        }
-
-        public Product searchItemBySlotLocation(String slotLocation) {
-            for (Product product : inventory) {
-                if (Objects.equals(product.getSlotLocation(), slotLocation)) {
-                    if (!product.isSoldOut()) {
-                        return product;
-                    }
-                }
-            }
-            return null;
+            String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
+            writer.write(totalSales);
+            System.out.println("Sales report has been generated: " + filename);
+        } catch (IOException e) {
+            System.out.println("Error writing the sales report to a file: " + e.getMessage());
         }
     }
+
+    public double calculateTotalSales() {
+        double totalSales = 0.0;
+        for (Product product : inventory) {
+            totalSales += product.getPrice() * (5 - product.getQuantity());
+        }
+        return totalSales;
+    }
+
+    public static String currentTime(String pattern) {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public Product searchItemBySlotLocation(String slotLocation) {
+        for (Product product : inventory) {
+            if (Objects.equals(product.getSlotLocation(), slotLocation)) {
+                if (!product.isSoldOut()) {
+                    return product;
+                }
+            }
+        }
+        return null;
+    }
+}
