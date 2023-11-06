@@ -1,10 +1,13 @@
 package com.techelevator;
-
-import java.io.FileOutputStream;
+import javax.security.sasl.SaslClient;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.Set;
 
 public class VendingMachine {
     private Set<Product> inventory;
@@ -27,7 +30,7 @@ public class VendingMachine {
     }
 
     public void displayItem(Product product) {
-        System.out.printf("%s %s %s %s%n",
+        System.out.printf("%s %s $%.2f %s%n",
                 product.getSlotLocation(),
                 product.getName(),
                 product.getPrice(),
@@ -42,33 +45,18 @@ public class VendingMachine {
 
     public void selectProduct() {
         while (true) {
-            // Display the list of available products
             displayAllItems();
-
-            // Ask the user to enter a product code
             String slotLocation = promptForProductSelection();
-
-            // Check if the product code exists and the product is not sold out
             Product selectedProduct = searchItemBySlotLocation(slotLocation);
 
             if (selectedProduct == null) {
                 System.out.println("Invalid product code or product is sold out. Please try again.");
             } else {
-                // Check if the user has enough balance to make the purchase
                 if (account.getBalance() >= selectedProduct.getPrice()) {
-                    // Charge the account
                     account.subtractFromBalance(selectedProduct.getPrice());
-
-                    // Decrease the quantity of the product
                     selectedProduct.decrementQuantity();
-
-                    // Dispense the selected product
                     dispenseProduct(selectedProduct);
-
-                    // Log the transaction
-//                    logTransaction(selectedProduct);
-
-                    // Go back to the Purchase menu
+                    logTransaction(selectedProduct.getName(), selectedProduct.getPrice());
                     break;
                 } else {
                     System.out.println("Insufficient balance to purchase this item. Please try again.");
@@ -79,111 +67,123 @@ public class VendingMachine {
 
     private void dispenseProduct(Product product) {
         System.out.println("Dispensing " + product.getName());
-        System.out.println("Price: $" + product.getPrice());
-        System.out.println("Money Remaining: $" + account.getBalance());
+        System.out.printf("Price: $%.2f%n", product.getPrice());
+        System.out.printf("Money Remaining: $%.2f%n", account.getBalance());
 
-        String message = "";
-        if (product.getType().equalsIgnoreCase("Chip"))
-            message = "Crunch Crunch, Yum!";
-        else if (product.getType().equalsIgnoreCase("Candy"))
-            message = "Munch Munch, Yum!";
-        else if (product.getType().equalsIgnoreCase("Drink"))
-            message = "Glug Glug, Yum!";
-        else if (product.getType().equalsIgnoreCase("Gum"))
-            message = "Chew Chew, Yum!";
-
+        String message = getMessageForProductType(product.getType());
         System.out.println(message);
+    }
+    public String getMessageForProductType(String productType) {
+        switch (productType.toLowerCase()) {
+            case "chip":
+                return "Crunch Crunch, Yum!";
+            case "candy":
+                return "Munch Munch, Yum!";
+            case "drink":
+                return "Glug Glug, Yum!";
+            case "gum":
+                return "Chew Chew, Yum!";
+            default:
+                return "Yum Yum!";
+        }
     }
 
     private String promptForProductSelection() {
-        Scanner scanner = new Scanner(System.in);
         String slotLocation = "";
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("Enter the slot location of the product you want to purchase: ");
             slotLocation = scanner.nextLine();
-            if (!isValidSlotLocation(slotLocation))
+            if (!isValidSlotLocation(slotLocation)) {
                 System.out.println("Invalid slot location or product is sold out. Please try again.");
-            else
+            } else {
                 break;
+            }
         }
-        scanner.close();
         return slotLocation;
     }
 
     private boolean isValidSlotLocation(String slotLocation) {
-        if (slotLocation.isEmpty())
+        if (slotLocation.isEmpty()) {
             return false;
+        }
 
         for (Product product : inventory) {
-            if (product.getSlotLocation().equalsIgnoreCase(slotLocation) && !product.isSoldOut())
-                return true;
+            if (Objects.equals(product.getSlotLocation(), slotLocation)) {
+                if (product.isSoldOut()) {
+                    System.out.println("SOLD OUT: " + product.getName());
+                } else {
+                    return true;
+                }
+            }
         }
         return false;
     }
 
-    private void logTransaction(String message, double amount) {
-//        String transaction = String.format("%s %s $%.2f $%.2f",
-//                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
-//                product.getName(),
-//                product.getPrice(),
-//                account.getBalance());
-//        transactionsList.add(transaction);
-
+    private void logTransaction(String productName, double amount) {
         String transaction = String.format("%s %s $%.2f $%.2f",
-                currentTime("MM/dd/yyyy hh:mm:ss a"),
-                message,
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
+                productName,
                 amount,
-                account.getBalance()
-        );
+                account.getBalance());
 
-        writeToFile(transaction, "Log.txt");
+        writeTransactionLog(transaction, "transactions.log");
     }
 
-
-    public void generateSalesReport() {
-        String filename = String.format("sales_report_%s.txt",
-                currentTime("yyyyMMddHHmmss"));
-
-        for (Product product : inventory) {
-            int quantityRemaining = 5 - product.getQuantity();
-
-            String line = String.format("%s|%s",
-                    product.getName(),
-                    quantityRemaining);
-
-            writeToFile(line, filename);
-
-        }
-
-        String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
-        writeToFile(totalSales, filename);
-    }
-
-    public double calculateTotalSales() {
-        double salesCounter = 0.0;
-        for (Product product : inventory) {
-            salesCounter+=product.getPrice() * (5 - product.getQuantity());
-        }
-        return salesCounter;
-    }
-
-    public static String currentTime(String pattern) {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
-    }
-
-    public void writeToFile(String string, String filename) {
-        try (FileOutputStream logWriter = new FileOutputStream(filename, true)) {
-            logWriter.write(string.getBytes());
+    private void writeTransactionLog(String transaction, String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            writer.write(transaction);
+            writer.newLine();
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.out.println("Error writing the transaction to the log: " + e.getMessage());
         }
     }
 
-    public Product searchItemBySlotLocation(String slotLocation) {
-        for (Product product : inventory) {
-            if (Objects.equals(product.getSlotLocation(), slotLocation))
-                return product;
+        public void generateSalesReport() {
+            String filename = String.format("sales_report_%s.txt",
+                    currentTime("yyyyMMddHHmmss"));
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+                for (Product product : inventory) {
+                    int quantityRemaining = 5 - product.getQuantity();
+                    String line = String.format("%s|%s|%d|%s",
+                            product.getSlotLocation(),
+                            product.getName(),
+                            quantityRemaining,
+                            product.getType()
+                    );
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                String totalSales = String.format("\n**TOTAL SALES** $%.2f", calculateTotalSales());
+                writer.write(totalSales);
+                System.out.println("Sales report has been generated: " + filename);
+            } catch (IOException e) {
+                System.out.println("Error writing the sales report to a file: " + e.getMessage());
+            }
         }
-        return null;
+
+        public double calculateTotalSales() {
+            double totalSales = 0.0;
+            for (Product product : inventory) {
+                totalSales += product.getPrice() * (5 - product.getQuantity());
+            }
+            return totalSales;
+        }
+
+        public static String currentTime(String pattern) {
+            return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
+        }
+
+        public Product searchItemBySlotLocation(String slotLocation) {
+            for (Product product : inventory) {
+                if (Objects.equals(product.getSlotLocation(), slotLocation)) {
+                    if (!product.isSoldOut()) {
+                        return product;
+                    }
+                }
+            }
+            return null;
+        }
     }
-}
