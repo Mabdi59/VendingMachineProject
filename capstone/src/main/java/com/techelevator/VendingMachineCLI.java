@@ -37,35 +37,10 @@ public class VendingMachineCLI {
             } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
                 break;
             } else if (choice.equals(MAIN_MENU_OPTION_SALES_REPORT)) {
-//                System.out.println("Sales report feature is under construction.");
                 vendingMachine.generateSalesReport();
             }
         }
     }
-
-//    private double promptForMoney() {
-//        Scanner scanner = new Scanner(System.in);
-//        double moneyToAdd = 0.0;
-//
-//        while (true) {
-//            System.out.print("Enter the amount to add (in dollars): $");
-//
-//            if (scanner.hasNextDouble()) {
-//                moneyToAdd = scanner.nextDouble();
-//
-//                if (moneyToAdd > 0) {
-//                    break;
-//                } else {
-//                    System.out.println("Please enter a valid positive amount.");
-//                }
-//            } else {
-//                System.out.println("Invalid input. Please enter a valid number.");
-//                scanner.next(); // Consume invalid input
-//            }
-//        }
-//
-//        return moneyToAdd;
-//    }
 
     public static void main(String[] args) {
         Menu menu = new Menu(System.in, System.out);

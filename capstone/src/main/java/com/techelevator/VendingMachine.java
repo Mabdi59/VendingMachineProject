@@ -105,6 +105,52 @@ public class VendingMachine {
         return moneyToAdd;
     }
 
+    public boolean processPurchase(String productCode, int quantity) {
+        Product productToPurchase = searchItemBySlotLocation(productCode);
+        if (productToPurchase == null) {
+            System.out.println("Product does not exist.");
+            return false;
+        }
+        if (productToPurchase.isSoldOut()) {
+            System.out.println("Product is sold out.");
+            return false;
+        }
+        double totalCost = productToPurchase.getPrice() * quantity;
+        if (account.getBalance() < totalCost) {
+            System.out.println("Insufficient funds.");
+            return false;
+        }
+
+        // Subtract the cost from the balance
+        account.subtractFromBalance(totalCost);
+        // "Sell" the item
+        for (int i = 0; i < quantity; i++) {
+            productToPurchase.decrementQuantity();
+        }
+        dispenseProduct(productToPurchase);
+
+        // Log this action to a file
+        logPurchase(productCode, quantity);
+
+        return true; // indicates successful processing
+    }
+
+    private void logPurchase(String productCode, int quantity) {
+        Product product = searchItemBySlotLocation(productCode);
+        if (product == null) return;  // Additional validation can be implemented
+
+        double totalCost = product.getPrice() * quantity;
+        String transaction = String.format("%s Purchase: %s Quantity: %d Total Cost: $%.2f Remaining Balance: $%.2f",
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")),
+                product.getName(),
+                quantity,
+                totalCost,
+                account.getBalance());
+
+        writeTransactionLog(transaction, "Log.txt");
+    }
+
+
     public void dispenseChange() {
         logTransaction("GIVE CHANGE", account.giveChange());
         account.giveChange();
@@ -127,10 +173,10 @@ public class VendingMachine {
 
     private String promptForProductSelection() {
         String slotLocation = "";
-//        Scanner userInput = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         while (true) {
             System.out.print("Enter the slot location of the product you want to purchase: ");
-            slotLocation = userInput.nextLine();
+            slotLocation = input.nextLine();
             if (!isValidSlotLocation(slotLocation)) {
                 System.out.println("Invalid slot location or product is sold out. Please try again.");
             } else {
@@ -189,7 +235,7 @@ public class VendingMachine {
                         quantityRemaining
                         // product.getType()
                 );
-                writer.write(line);
+                writer.write("Sales Report Contents");
                 writer.newLine();
                 System.out.println("new file: " + filename);
             }
@@ -224,4 +270,5 @@ public class VendingMachine {
         }
         return null;
     }
+
 }
