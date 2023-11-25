@@ -44,7 +44,7 @@ public class VendingMachineTest {
         vendingMachine = new VendingMachine();
         vendingMachine.loadInventory("src/test/resources/inventory_test.txt");
         // Assuming there is a method to set the log file path
-        vendingMachine.setLogFilePath(logPath.toString());
+      //  vendingMachine.setLogFilePath(logPath.toString());
     }
 
 

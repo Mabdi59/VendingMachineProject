@@ -23,7 +23,7 @@ public class VendingMachineCLI {
 
     public void run() {
         VendingMachine vendingMachine = new VendingMachine();
-        vendingMachine.loadInventory("src/main/resources/inventory.txt");
+        vendingMachine.loadInventory("vendingmachine.csv");
         while (true) {
             String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 

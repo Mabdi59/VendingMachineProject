@@ -5,16 +5,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
 public class VendingMachine {
     private Scanner userInput = new Scanner(System.in);
-    private Set<Product> inventory;
+    private Map<String, Product> inventory;
     private CustomerAccount account;
 
-    public Set<Product> getInventory() {
+    public Map<String, Product> getInventory() {
         return inventory;
     }
 
@@ -39,7 +40,7 @@ public class VendingMachine {
     }
 
     public void displayAllItems() {
-        for (Product product : inventory) {
+        for (Product product : inventory.values()) {
             displayItem(product);
         }
     }
@@ -191,7 +192,7 @@ public class VendingMachine {
             return false;
         }
 
-        for (Product product : inventory) {
+        for (Product product : inventory.values()) {
             if (Objects.equals(product.getSlotLocation(), slotLocation)) {
                 if (product.isSoldOut()) {
                     System.out.println("SOLD OUT: " + product.getName());
@@ -227,7 +228,7 @@ public class VendingMachine {
                 currentTime("yyyyMMddHHmmss"));
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Product product : inventory) {
+            for (Product product : inventory.values()) {
                 int quantityRemaining = 5 - product.getQuantity();
                 String line = String.format("%s|%d",
                         //  product.getSlotLocation(),
@@ -250,7 +251,7 @@ public class VendingMachine {
 
     public double calculateTotalSales() {
         double totalSales = 0.0;
-        for (Product product : inventory) {
+        for (Product product : inventory.values()) {
             totalSales += product.getPrice() * (5 - product.getQuantity());
         }
         return totalSales;
@@ -261,7 +262,7 @@ public class VendingMachine {
     }
 
     public Product searchItemBySlotLocation(String slotLocation) {
-        for (Product product : inventory) {
+        for (Product product : inventory.values()) {
             if (Objects.equals(product.getSlotLocation(), slotLocation)) {
                 if (!product.isSoldOut()) {
                     return product;

@@ -5,20 +5,19 @@ import com.techelevator.exceptions.ProductFormatException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Inventory {
     private String filePath;
-    private Set<Product> inventory = new HashSet<>();
+    //private Set<Product> inventory = new HashSet<>();
 
+    private Map<String,Product> inventory = new TreeMap<>();
     public Inventory(String filePath) {
         this.filePath = filePath;
         loadInventory();
     }
 
-    public Set<Product> getInventory() {
+    public Map<String,Product> getInventory() {
         return inventory;
     }
 
@@ -29,7 +28,11 @@ public class Inventory {
     private void loadInventory() {
         try {
             for (String string : readFile()) {
-                inventory.add(Product.toProduct(string));
+                Product product = Product.toProduct(string);
+
+
+              //  inventory.add(product);
+                inventory.put(product.getSlotLocation(),product);
             }
         } catch (ProductFormatException e) {
             System.out.println("Invalid product format" + e);
