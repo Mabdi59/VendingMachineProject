@@ -153,8 +153,8 @@ public class VendingMachine {
 
 
     public void dispenseChange() {
-        logTransaction("GIVE CHANGE", account.giveChange());
-        account.giveChange();
+        double change = account.giveChange();
+        logTransaction("GIVE CHANGE", change);
     }
 
     public String getMessageForProductType(String productType) {

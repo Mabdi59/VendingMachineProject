@@ -41,11 +41,10 @@ public class Product {
         return quantity;
     }
 
-    public int decrementQuantity() {
+    public void decrementQuantity() {
         if (quantity > 0) {
             quantity--;
         }
-        return quantity;
     }
 
     public boolean isSoldOut() {
